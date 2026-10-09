@@ -1,0 +1,19 @@
+{{- $spec := deepCopy .Values.deployment -}}
+{{- $_ := set $spec "replicas" .Values.replicaCount -}}
+{{- $containers := $spec.template.spec.containers -}}
+{{- $image := printf "%s:%s" .Values.image.repository .Values.image.tag -}}
+{{- if .Values.image.digest -}}
+{{- $image = printf "%s@%s" .Values.image.repository .Values.image.digest -}}
+{{- else if not .Values.image.tag -}}
+{{- fail "An image digest or explicit development tag is required" -}}
+{{- end -}}
+{{- $_ := set (index $containers 0) "image" $image -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  labels:
+    app.kubernetes.io/name: catalogue
+    app.kubernetes.io/part-of: boutique
+  namespace: {{ .Release.Namespace }}
+spec:{{ toYaml $spec | nindent 2 }}
