@@ -8,7 +8,7 @@ CMD ["sh", "ci/test.sh"]
 
 FROM source AS build
 RUN CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags="-s -w" -o /catalogue .
-FROM alpine:3.23@sha256:85fe1e81d6758c208f3e1eed4338a1997e19d4be002d4dd32d3100c9a8c010a0
+FROM alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
 RUN addgroup -g 10001 app && adduser -D -u 10001 -G app app
 COPY --from=build --chmod=755 /catalogue /usr/local/bin/catalogue
 USER 10001:10001
