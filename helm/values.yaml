@@ -39,7 +39,9 @@ deployment:
         ports:
         - name: http
           containerPort: 8081
-        env: []
+        env:
+        - name: COMMERCE_URL
+          value: "" []
         resources:
           requests:
             cpu: 100m
