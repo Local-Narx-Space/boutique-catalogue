@@ -39,7 +39,7 @@ The root `Jenkinsfile` calls the version-pinned, sandboxed shared library in `bo
 
 ## Helm deployment
 
-`helm/` owns this service’s Kubernetes chart. Jenkins lints/renders it, packages it with the full source commit, publishes it to GHCR OCI and archives its checksum alongside the tested image digest. The GitOps environment chart vendors that exact package for promotion and rollback. See [Helm delivery](https://github.com/subhankar12-spec/boutique-gitops/blob/main/docs/helm-delivery.md) and [the Debian/kind deployment guide](https://github.com/subhankar12-spec/boutique-platform/blob/main/docs/deploy-cicd-kind.md).
+`helm/` owns this service’s Kubernetes chart. Jenkins lints/renders it, packages it with the full source commit, publishes it to GHCR OCI and archives its checksum alongside the tested image digest. The GitOps environment chart vendors that exact package for promotion and rollback. See [Helm delivery](https://github.com/Local-Narx-Space/boutique-gitops/blob/main/docs/helm-delivery.md) and [the Debian/kind deployment guide](https://github.com/Local-Narx-Space/boutique-platform/blob/main/docs/deploy-cicd-kind.md).
 
 Go's standard library is linked into the catalogue executable. Updating only
 the final Alpine image does not patch it: rebuild with the patched Go toolchain.
