@@ -18,7 +18,26 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+          path: service
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: Local-Narx-Space/boutique-ci
+          ref: 4e65a7344239288c360f61bb0eff7c472b94bad8
+          path: trusted-ci
+          persist-credentials: false
+      - name: Install checksum-verified Helm and schema tools
+        run: |
+          python3 trusted-ci/jenkins/scripts/install-agent-tools.py --destination "$RUNNER_TEMP/tools" --only helm kubeconform
+          echo "$RUNNER_TEMP/tools/bin" >> "$GITHUB_PATH"
+      - name: Validate service chart
+        working-directory: service
+        run: |
+          helm lint --strict helm
+          helm template boutique-pr helm --namespace boutique-dev > "$RUNNER_TEMP/chart.yaml"
+          mkdir -p "$RUNNER_TEMP/kubeconform"
+          kubeconform -cache "$RUNNER_TEMP/kubeconform" -strict -summary -kubernetes-version 1.34.0 "$RUNNER_TEMP/chart.yaml"
       - name: Test the service
+        working-directory: service
         run: |
           mkdir -p test-reports
           docker build --pull --target test --tag boutique-pr:test .
